@@ -9,7 +9,7 @@ using namespace std;
 class GestorArchivos {
 public:
     static vector<Montos> cargarDatos(const string& archivo);
-    static void guardarDatos(const vector<Montos>& montos);
+    static void guardarDatos(const vector<Montos>& montos, const string& archivo);
 
 };
 

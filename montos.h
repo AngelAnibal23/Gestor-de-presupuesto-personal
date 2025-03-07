@@ -17,8 +17,9 @@ class Montos{
 	    float getIngreso() const { return ingreso; }
 	    string getTipoIngreso() const { return tipoIngreso; }
 	    string getFecha() const { return fecha; }
+	    float getGeneral() const { return general; }
 	    string getID();
-	    float actualizarGeneral(float ingreso){
+	    void actualizarGeneral(float ingreso){
 	    	general += ingreso;  
 		}
 };
