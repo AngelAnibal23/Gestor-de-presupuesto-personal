@@ -19,9 +19,9 @@ void GestorArchivos::guardarDatos(const vector<Montos>& montos, const string& ar
 
     for (const auto& monto : montos) {
         file << monto.getIngreso() << ","
-             << monto.getTipoIngreso() << "\n";
-            // << monto.getFecha() << ","
-            // << monto.getID() << 
+             << monto.getTipoIngreso() << ","
+             << monto.getFecha() << "," 
+             << monto.getID() << "\n";
     }
 
     file.close();
