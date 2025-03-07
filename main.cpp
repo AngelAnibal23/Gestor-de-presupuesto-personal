@@ -6,7 +6,6 @@
 using namespace std; 
 
 int main() {
-	
 	vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt"); 
 	
 	int opcion; 
@@ -25,7 +24,7 @@ int main() {
 			
 			switch(opcion){
 				case 1: {
-				
+				 
 					break;
 				}
 				case 2: {
