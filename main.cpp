@@ -1,11 +1,11 @@
 #include <iostream>
-
+using namespace std; 
 
 int main() {
-	
+	int opcion; 
 	
 	do{
-		int opcion; 	
+			
 	
 			cout << "------------GESTOR DE FINANZAS PERSONAL------------" << endl; 
 			cout << " [1] Mostrar registro general. " << endl; 
@@ -37,7 +37,7 @@ int main() {
 					break;
 				}
 				default: {
-					err << "Opcion no valida, vuelva a ingresar" << endl; 
+					cout << "Opcion no valida, vuelva a ingresar" << endl; 
 					break;
 				}
 			}
