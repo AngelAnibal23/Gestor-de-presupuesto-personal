@@ -12,13 +12,19 @@ class Montos{
 		string fecha; 
 		string ID; 
 	public: 
-		float general; 
-		Montos(float ing, string tipo, string f, string id)  : ingreso(ing), tipoIngreso(tipo), fecha(f), ID(id) {}
+		float general = 0;
+		Montos(){} 
+		Montos(float ing, string tipo, string f, string id)  : ingreso(ing), tipoIngreso(tipo){
+			fecha = obtenerFechaActual(); 
+			ID = generarID(); 	
+		}
 	    float getIngreso() const { return ingreso; }
+	    string obtenerFechaActual();
+		string generarID();  
 	    string getTipoIngreso() const { return tipoIngreso; }
 	    string getFecha() const { return fecha; }
 	    float getGeneral() const { return general; }
-	    string getID();
+	    string getID() const { return ID; }
 	    void actualizarGeneral(float ingreso){
 	    	general += ingreso;  
 		}
