@@ -7,6 +7,15 @@
 using namespace std; 
 
 
+Montos::Montos(float ingreso_, const string& tipoIngreso_, const string& descripcion_, const string& fecha_, const string& id_){
+				 ingreso = ingreso_;  
+				 tipoIngreso = tipoIngreso_; 
+				 fecha = fecha_; 
+				 ID = id_; 
+				 descripcion = descripcion_;
+}
+
+
 string Montos::generarID(){
 	char letra = 'A' + rand()% 26; 
 	int n1, n2, n3; 
