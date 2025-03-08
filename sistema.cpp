@@ -7,34 +7,57 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std; 
+using namespace std; 		
+
+// Función para centrar una línea en la consola
+void centrarLinea(const string& texto, int anchoConsola = 80) {
+    int espacios = (anchoConsola - texto.length()) / 2;
+    if (espacios > 0) {
+        cout << string(espacios, ' ');
+    }
+    cout << texto << endl;
+}
 
 void Sistema::mostrarReporteGeneral() {
-
     vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt");
 
     if (montos.empty()) {
-        cout << "No hay movimientos registrados.\n";
+        centrarLinea("No hay movimientos registrados.");
     } else {
         float montoTotal = 0;
-        cout << "\n=== REPORTE GENERAL ===\n";
-        cout << "------------------------------------------------------------\n";
-        cout << setw(10) << "TIPO" << setw(15) << "CATEGORIA" << setw(20) << "DESCRIPCION"
-             << setw(15) << "FECHA" << setw(10) << "ID" << endl;
-        cout << "------------------------------------------------------------\n";
 
+        // Encabezado del reporte
+        centrarLinea("=== REPORTE GENERAL ===");
+        centrarLinea("------------------------------------------------------------");
+
+        // Encabezados de la tabla
+        string encabezados = "MONTO       CATEGORIA    DESCRIPCION         FECHA       ID";
+        centrarLinea(encabezados);
+        centrarLinea("------------------------------------------------------------");
+
+        // Datos de la tabla
         for (const auto& monto : montos) {
-            cout << setw(10) << (monto.getIngreso() >= 0 ? "INGRESO" : "GASTO")
-                 << setw(15) << monto.getTipoIngreso()
-                 << setw(20) << monto.getDescripcion()
-                 << setw(15) << monto.getFecha()
-                 << setw(10) << monto.getID() << endl;
+            string tipo = "s/." + to_string((int)monto.getIngreso());
+            string categoria = monto.getTipoIngreso();
+            string descripcion = monto.getDescripcion();
+            string fecha = monto.getFecha();
+            string id = monto.getID();
+
+            string linea = tipo + string(10 - tipo.length(), '    ') +
+                           categoria + string(15 - categoria.length(), '  ') +
+                           descripcion + string(20 - descripcion.length(), ' ') +
+                           fecha + string(15 - fecha.length(), ' ') +
+                           id;
+
+            centrarLinea(linea);
             montoTotal += monto.getIngreso();
         }
 
-        cout << "------------------------------------------------------------\n";
-        cout << "MONTO TOTAL: " << fixed << setprecision(2) << montoTotal << " soles\n";
-        cout << "------------------------------------------------------------\n";
+        // Pie del reporte
+        centrarLinea("------------------------------------------------------------");
+        string total = "MONTO TOTAL: " + to_string(montoTotal) + " soles";
+        centrarLinea(total);
+        centrarLinea("------------------------------------------------------------");
     }
 }
 
@@ -61,12 +84,11 @@ void Sistema::registrarMovimiento() {
 	fecha = Montos::obtenerFechaActual();
 	id = Montos::generarID(); 
 	
-
-    // Crear un objeto Montos y guardarlo
-    Montos nuevoMonto(ingreso, tipoIngreso, descripcion, fecha, id);
-    vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt");
-    montos.emplace_back(nuevoMonto);
-    GestorArchivos::guardarDatos(montos, "montos.txt");
+	Montos nuevoMonto(ingreso, tipoIngreso, descripcion, fecha, id);
+	vector<Montos> nuevoVector = {nuevoMonto}; // Solo guarda el nuevo registro
+	GestorArchivos::guardarDatos(nuevoVector, "montos.txt");
+    
+    
 
     cout << "Movimiento registrado correctamente.\n";
 }

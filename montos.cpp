@@ -33,12 +33,12 @@ string Montos::generarID(){
     return id;	
 }
 
-string Montos::obtenerFechaActual(){
-	time_t tiempo_actual = time(NULL);
+string Montos::obtenerFechaActual() {
+    time_t tiempo_actual = time(NULL);
     tm* ahora_local = localtime(&tiempo_actual);
 
-    char arreglo_hora[100];
-    strftime(arreglo_hora, sizeof(arreglo_hora), "%d/%m/%Y %H:%M:%S", ahora_local);
+    char arreglo_fecha[11];  
+    strftime(arreglo_fecha, sizeof(arreglo_fecha), "%d/%m/%Y", ahora_local);
     
-    return string(arreglo_hora);
+    return string(arreglo_fecha);
 }

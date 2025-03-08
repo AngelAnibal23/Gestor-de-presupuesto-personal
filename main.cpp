@@ -20,10 +20,13 @@ int main() {
         cout << " [5] Filtrar por tipo de monto." << endl;
         cout << " .Digite su eleccion: ";
         cin >> opcion;
+    	system("cls"); 
 
         switch (opcion) {
             case 1: {
                 Sistema::mostrarReporteGeneral();
+                system("PAUSE"); 
+                system("cls"); 
                 break;
             }
             case 2: {
