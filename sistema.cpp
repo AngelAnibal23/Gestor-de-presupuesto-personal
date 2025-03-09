@@ -4,6 +4,7 @@
 #include <vector>
 #include <string> 
 #include <limits>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 
@@ -27,7 +28,7 @@ void Sistema::mostrarReporteGeneral() {
         float montoTotal = 0;
 
         // Encabezado del reporte
-        centrarLinea("=== REPORTE GENERAL ===");
+        centrarLinea("==================== REPORTE GENERAL ====================");
         centrarLinea("------------------------------------------------------------");
 
         // Encabezados de la tabla
@@ -91,5 +92,63 @@ void Sistema::registrarMovimiento() {
     
 
     cout << "Movimiento registrado correctamente.\n";
+}
+
+void Sistema::modificarMovimiento() {
+    string idBuscado;
+    cout << "Digite el ID del movimiento por editar: ";
+    cin.ignore(); 
+    getline(cin, idBuscado);
+
+    ifstream archivoEntrada("montos.txt"); // Abrir el archivo en modo lectura
+    if (!archivoEntrada) {
+        cerr << "Error al abrir el archivo.\n";
+        return;
+    }
+
+    vector<Montos> montos;
+    string linea;
+    bool encontrado = false;
+
+    
+    while (getline(archivoEntrada, linea)) {
+        istringstream ss(linea);
+        float ingreso;
+        string tipoIngreso, descripcion, fecha, id;
+
+        ss >> ingreso >> tipoIngreso >> descripcion >> fecha >> id; // Extraer valores
+
+        if (id == idBuscado) {
+            encontrado = true;
+            cout << "Ingrese el nuevo monto: ";
+            while (!(cin >> ingreso)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Entrada inválida. Intente nuevamente: ";
+            }
+            cin.ignore(); // Limpiar buffer
+
+            cout << "Ingrese el nuevo tipo de ingreso: ";
+            getline(cin, tipoIngreso);
+
+            cout << "Ingrese la nueva descripción: ";
+            getline(cin, descripcion);
+
+            // Actualizar el objeto Montos
+            montos.emplace_back(ingreso, tipoIngreso, descripcion, fecha, id);
+        } else {
+            montos.emplace_back(ingreso, tipoIngreso, descripcion, fecha, id);
+        }
+    }
+    archivoEntrada.close();
+
+    if (!encontrado) {
+        cout << "No se encontró un movimiento con ese ID.\n";
+        return;
+    }
+
+    GestorArchivos::guardarDatos(montos, "montos.txt"); 
+
+    cout << "Movimiento modificado correctamente.\n";
 }
 
