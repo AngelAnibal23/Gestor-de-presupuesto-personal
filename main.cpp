@@ -15,7 +15,7 @@ int main() {
         cout << "------------GESTOR DE FINANZAS PERSONAL------------" << endl;
         cout << " [1] Mostrar registro general. " << endl;
         cout << " [2] Registrar ingresos o gastos. " << endl;
-        cout << " [3] Modificar algun monto. " << endl;
+        cout << " [3] Editar algun monto. " << endl;
         cout << " [4] Filtrar por fecha. " << endl;
         cout << " [5] Filtrar por tipo de monto." << endl;
         cout << " .Digite su eleccion: ";
@@ -34,7 +34,8 @@ int main() {
                 break;
             }
             case 3: {
-                // Implementar modificación
+            	Sistema::mostrarReporteGeneral();
+                Sistema::modificarMovimiento(); 
                 break;
             }
             case 4: {
