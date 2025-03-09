@@ -10,14 +10,15 @@ int main() {
     vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt");
 
     int opcion;
+    string idBuscado;
 
     do {
         cout << "------------GESTOR DE FINANZAS PERSONAL------------" << endl;
-        cout << " [1] Mostrar registro general. " << endl;
-        cout << " [2] Registrar ingresos o gastos. " << endl;
-        cout << " [3] Editar algun monto. " << endl;
-        cout << " [4] Filtrar por fecha. " << endl;
-        cout << " [5] Filtrar por tipo de monto." << endl;
+        cout << " [1] Mostrar reporte general. " << endl;
+        cout << " [2] Registrar movimiento. " << endl;
+        cout << " [3] Editar movimiento. " << endl;
+        cout << " [4] Eliminar movimiento. " << endl;
+        cout << " [0] Cerrar el gestor. " << endl;
         cout << " .Digite su eleccion: ";
         cin >> opcion;
     	system("cls"); 
@@ -31,19 +32,32 @@ int main() {
             }
             case 2: {
                 Sistema::registrarMovimiento();
+                system("PAUSE"); 
+                system("cls"); 
                 break;
             }
             case 3: {
             	Sistema::mostrarReporteGeneral();
-                Sistema::modificarMovimiento(); 
+            	
+			    cout << "Digite el ID del movimiento por editar: ";
+			    cin.ignore();
+			    getline(cin, idBuscado);
+			    	
+	        	Sistema::modificarMovimiento(idBuscado); 
+	        	system("PAUSE"); 
+                system("cls"); 
                 break;
             }
             case 4: {
-                // Implementar filtrado por fecha
-                break;
-            }
-            case 5: {
-                // Implementar filtrado por tipo de monto
+                Sistema::mostrarReporteGeneral();
+                
+                cout << "Digite el ID del movimiento por eliminar: ";
+			    cin.ignore();
+			    getline(cin, idBuscado);
+                
+                Sistema::eliminarMovimiento(idBuscado);
+                system("PAUSE"); 
+                system("cls"); 
                 break;
             }
             default: {
