@@ -11,8 +11,8 @@ class Sistema{
 	public: 
 		static void mostrarReporteGeneral(); 
 		static void registrarMovimiento(); 
-		static void modificarMovimiento(); 
-		static void eliminarMovimiento(); 
+		static void modificarMovimiento(string idBuscado); 
+		static void eliminarMovimiento(string idBuscado); 
 };
 
 #endif // SISTEMA_H
