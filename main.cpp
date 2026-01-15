@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
     vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt");
-
+	
     int opcion;
     string idBuscado;
 
