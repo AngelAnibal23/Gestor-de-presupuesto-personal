@@ -2,3 +2,5 @@
 *.o
 *.win 
 *.layout 
+*.txt
+*.gch
