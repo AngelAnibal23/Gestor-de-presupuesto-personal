@@ -3,6 +3,10 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include <random>
+#include <chrono>
+#include <sstream>
+#include <iomanip>
 
 using namespace std; 
 
@@ -17,20 +21,16 @@ Montos::Montos(float ingreso_, const string& tipoIngreso_, const string& descrip
 
 
 string Montos::generarID(){
-	char letra = 'A' + rand()% 26; 
-	int n1, n2, n3; 
-	
-	n1 = rand() % 10;
-	n2 = rand() % 10;
-	n3 = rand() % 10;
-	
-	string id = "";
-    id += letra;
-    id += to_string(n1);
-    id += to_string(n2);
-    id += to_string(n3);
-
-    return id;	
+	 static std::mt19937 gen(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+        std::uniform_int_distribution<int> distLetra(0, 25);
+        std::uniform_int_distribution<int> distNumero(0, 999);
+        
+        char letra = 'A' + distLetra(gen);
+        int numero = distNumero(gen);
+        
+        std::ostringstream oss;
+        oss << letra << std::setfill('0') << std::setw(3) << numero;
+        return oss.str();
 }
 
 string Montos::obtenerFechaActual() {
