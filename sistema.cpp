@@ -7,93 +7,90 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include "disenoReporte.cpp"
 
 using namespace std; 		
 
-// Función para centrar una línea en la consola
-void centrarLinea(const string& texto, int anchoConsola = 80) {
-    int espacios = (anchoConsola - texto.length()) / 2;
-    if (espacios > 0) {
-        cout << string(espacios, ' ');
-    }
-    cout << texto << endl;
-}
 
 void Sistema::mostrarReporteGeneral() {
     vector<Montos> montos = GestorArchivos::cargarDatos("montos.txt");
 
     if (montos.empty()) {
-        centrarLinea("No hay movimientos registrados.");
-    } else {
-        float montoTotal = 0;
-
-        // Encabezado del reporte
-        centrarLinea("==================== REPORTE GENERAL ====================");
-        centrarLinea("------------------------------------------------------------");
-
-        // Encabezados de la tabla
-        string encabezados = "MONTO       CATEGORIA    DESCRIPCION         FECHA       ID";
-        centrarLinea(encabezados);
-        centrarLinea("------------------------------------------------------------");
-
-        // Datos de la tabla
-        for (const auto& monto : montos) {
-            string tipo = "s/." + to_string((int)monto.getIngreso());
-            string categoria = monto.getTipoIngreso();
-            string descripcion = monto.getDescripcion();
-            string fecha = monto.getFecha();
-            string id = monto.getID();
-
-            string linea = tipo + string(10 - tipo.length(), '   ') +
-                           categoria + string(15 - categoria.length(), '  ') +
-                           descripcion + string(20 - descripcion.length(), ' ') +
-                           fecha + string(15 - fecha.length(), ' ') +
-                           id;
-
-            centrarLinea(linea);
-            montoTotal += monto.getIngreso();
-        }
-
-        // Pie del reporte
-        centrarLinea("------------------------------------------------------------");
-        string total = "MONTO TOTAL: " + to_string(montoTotal) + " soles";
-        centrarLinea(total);
-        centrarLinea("------------------------------------------------------------");
+        cout << "No hay movimientos registrados.\n";
+        return;
     }
+
+    // Anchos de columnas (ajústalos a tu gusto)
+    const int wMonto = 12;
+    const int wCat   = 20;
+    const int wDesc  = 28;
+    const int wFecha = 10; // dd/mm/yyyy
+    const int wId    = 6;
+
+    cout << "====================== REPORTE GENERAL ======================\n";
+
+    imprimirLinea(wMonto, wCat, wDesc, wFecha, wId);
+    imprimirFila("MONTO", "CATEGORIA", "DESCRIPCION", "FECHA", "ID",
+                 wMonto, wCat, wDesc, wFecha, wId);
+    imprimirLinea(wMonto, wCat, wDesc, wFecha, wId);
+
+    float total = 0.0;
+
+    for (const auto& m : montos) {
+        string montoStr = formatearSoles(m.getIngreso());
+        imprimirFila(montoStr, m.getTipoIngreso(), m.getDescripcion(),
+                     m.getFecha(), m.getID(),
+                     wMonto, wCat, wDesc, wFecha, wId);
+        total += m.getIngreso();
+    }
+
+    imprimirLinea(wMonto, wCat, wDesc, wFecha, wId);
+
+    // Fila de total (alineada y bonita)
+    string totalStr = formatearSoles(total);
+    cout << "| " << right << setw(wMonto) <<  total
+         << " | " << left  << setw(wCat)   << ""
+         << " | " << left  << setw(wDesc)  << ""
+         << " | " << left  << setw(wFecha) << ""
+         << " | " << left  << setw(wId)    << truncar(totalStr, wId)
+         << " |\n";
+
+    imprimirLinea(wMonto, wCat, wDesc, wFecha, wId);
 }
 
 void Sistema::registrarMovimiento() {
+try {
+        float ingreso;
+        string tipoIngreso, descripcion, fecha;
+        string id = Montos::generarID();
 
-    float ingreso;
-    string tipoIngreso, descripcion, fecha; 
-	string id = Montos::generarID(); 
-	
+        cout << "\n=== REGISTRAR MOVIMIENTO ===\n";
+        cout << "Ingrese el monto: ";
+        while (!(cin >> ingreso)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada invalida. Intente nuevamente: ";
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    cout << "\n=== REGISTRAR MOVIMIENTO ===\n";
-    cout << "Ingrese el monto: ";
-	    while (!(cin >> ingreso)) {
-	        cin.clear();
-	        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	        cout << "Entrada invalida. Intente nuevamente: ";
-	    }
-    	cin.ignore(); 
+        cout << "Ingrese el tipo: ";
+        getline(cin, tipoIngreso);
 
-    cout << "Ingrese el tipo: ";
-    getline(cin, tipoIngreso);
+        cout << "Ingrese una descripcion: ";
+        getline(cin, descripcion);
 
-    cout << "Ingrese una descripcion: ";
-    getline(cin, descripcion);
+        fecha = Montos::obtenerFechaActual();
 
-	fecha = Montos::obtenerFechaActual();
-	 
-	
-	Montos nuevoMonto(ingreso, tipoIngreso, descripcion, fecha, id);
-	vector<Montos> nuevoVector = {nuevoMonto};
-	GestorArchivos::guardarDatos(nuevoVector, "montos.txt");
-    
-    
+        Montos nuevoMonto(ingreso, tipoIngreso, descripcion, fecha, id);
+        vector<Montos> nuevoVector = {nuevoMonto};
+        GestorArchivos::guardarDatos(nuevoVector, "montos.txt");
 
-    cout << "Movimiento registrado correctamente.\n";
+        cout << "Movimiento registrado correctamente.\n";
+    }
+    catch (const std::exception& e) {
+        cout << "EXCEPCION: " << e.what() << "\n";
+        system("PAUSE");
+    }
 }
 
 
